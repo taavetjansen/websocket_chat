@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Chat</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        #chat-log { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; white-space: pre-wrap; }
+        #input-box { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Chat Interface</h1>
+    <div id="chat-log"></div>
+    <div id="input-box">
+        <input type="text" id="message" placeholder="Type your message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const socket = new WebSocket('wss://data.elektron.art');
+        const chatLog = document.getElementById('chat-log');
+        const messageInput = document.getElementById('message');
+
+        function generateUUID() {
+            return 'xxxxxxxx'.replace(/[x]/g, function() {
+                return (Math.random() * 36 | 0).toString(36);
+            });
+        }
+
+        socket.onopen = function() {
+            appendMessage('Connected to server.');
+        };
+
+        socket.onmessage = function(event) {
+            appendMessage('Server: ' + event.data);
+        };
+
+        socket.onerror = function(error) {
+            appendMessage('Error: ' + error);
+        };
+
+        socket.onclose = function() {
+            appendMessage('Connection closed.');
+        };
+
+        function sendMessage() {
+            const msg = messageInput.value;
+            if (msg !== '') {
+                const payload = {
+                    id: generateUUID(),
+                    datetime: new Date().toISOString(),
+                    channel: "memento_event2023",
+                    userid: "au1fmf5x",
+                    username: "Mr.Memento",
+                    type: "CHAT",
+                    value: msg,
+                    store: true
+                };
+                const jsonString = JSON.stringify(payload);
+                socket.send(jsonString);
+                appendMessage('You (sent):\n' + JSON.stringify(payload, null, 2));
+                messageInput.value = '';
+            }
+        }
+
+        function appendMessage(msg) {
+            const p = document.createElement('p');
+            p.textContent = msg;
+            chatLog.appendChild(p);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+    </script>
+</body>
+</html>
