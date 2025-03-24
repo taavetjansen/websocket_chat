@@ -5,15 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebSocket Chat</title>
     <style>
-        body {
+        html, body {
             margin: 0;
-            background-color: black;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
             font-family: Arial, sans-serif;
+            color: white;
+        }
+        body {
+            background: radial-gradient(
+                circle at 30% 30%,
+                rgba(255, 220, 180, 0.9),
+                rgba(255, 100, 50, 0.8) 40%,
+                rgba(80, 20, 10, 1) 80%
+            );
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: rgb(145, 100, 150); /* converted from 0.569057, 0.391837, 0.587755 */
+        }
+        .grain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=");
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            z-index: 0;
         }
         #chat-box {
             width: 600px;
@@ -26,11 +46,12 @@
             align-items: stretch;
             justify-content: flex-end;
             backdrop-filter: blur(5px);
+            z-index: 1;
         }
         #status {
             font-size: 14px;
             margin-bottom: 5px;
-            color: #aaa;
+            color: rgba(255, 255, 255, 0.6);
         }
         #input-area {
             display: flex;
@@ -43,14 +64,14 @@
             padding: 10px;
             font-size: 16px;
             background-color: black;
-            color: rgb(145, 100, 150);
-            border: 1px solid #444;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 10px;
         }
         #send-button {
-            background-color: rgb(145, 100, 150);
+            background-color: white;
             color: black;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.5);
             padding: 10px 15px;
             margin-left: 10px;
             cursor: pointer;
@@ -66,11 +87,13 @@
             font-size: 14px;
             overflow-y: auto;
             white-space: pre-wrap;
-            border: 1px solid rgb(145, 100, 150);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
         }
     </style>
 </head>
 <body>
+    <div class="grain"></div>
     <div id="chat-box">
         <div id="status">Connecting...</div>
         <div id="output"></div>
@@ -88,7 +111,7 @@
 
         socket.onopen = () => {
             status.textContent = 'Connected to server';
-            status.style.color = '#0f0';
+            status.style.color = 'rgba(255, 255, 255, 0.6)';
         };
 
         socket.onerror = (error) => {
@@ -118,9 +141,9 @@
                 const payload = {
                     id: generateUUID(),
                     datetime: new Date().toISOString(),
-                    channel: "experiment",
+                    channel: "memento_event2023",
                     userid: "au1fmf5x",
-                    username: "Mr.X",
+                    username: "Mr.Memento",
                     type: "CHAT",
                     value: msg,
                     store: true
