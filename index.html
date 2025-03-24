@@ -101,6 +101,11 @@
             status.style.color = '#f00';
         };
 
+        socket.onmessage = (event) => {
+            const current = output.textContent;
+            output.textContent = `${current}\nReceived:\n${event.data}`;
+        };
+
         function generateUUID() {
             return 'xxxxxxxx'.replace(/[x]/g, function() {
                 return (Math.random() * 36 | 0).toString(36);
@@ -115,14 +120,15 @@
                     datetime: new Date().toISOString(),
                     channel: "experiment",
                     userid: "au1fmf5x",
-                    username: "th001",
+                    username: "Mr.X",
                     type: "CHAT",
                     value: msg,
                     store: true
                 };
                 const jsonString = JSON.stringify(payload, null, 2);
                 socket.send(JSON.stringify(payload));
-                output.textContent = `Sent to server:\n${jsonString}`;
+                const current = output.textContent;
+                output.textContent = `${current}\nSent to server:\n${jsonString}`;
                 messageInput.value = '';
             }
         }
