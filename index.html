@@ -14,12 +14,8 @@
             color: white;
         }
         body {
-            background: radial-gradient(
-                circle at 30% 30%,
-                rgba(255, 220, 180, 0.9),
-                rgba(255, 100, 50, 0.8) 40%,
-                rgba(80, 20, 10, 1) 80%
-            );
+            background: url("background.png") no-repeat center center fixed;
+            background-size: cover;
             position: relative;
             display: flex;
             justify-content: center;
@@ -141,9 +137,9 @@
                 const payload = {
                     id: generateUUID(),
                     datetime: new Date().toISOString(),
-                    channel: "experiment",
+                    channel: "memento_event2023",
                     userid: "au1fmf5x",
-                    username: "th001",
+                    username: "Mr.Memento",
                     type: "CHAT",
                     value: msg,
                     store: true
